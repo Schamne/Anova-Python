@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter import ttk
 from openai import OpenAI
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 Chave_API = os.getenv('OPEN_AI_KEY')
 

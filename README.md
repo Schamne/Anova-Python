@@ -23,7 +23,7 @@ Antes de começar, você precisará ter o seguinte instalado em sua máquina:
 2. **Instale as dependências:**
 
    ```sh
-   pip install openai
+   pip install openai python-dotenv
    ```
 
    Nota: A biblioteca `tkinter` geralmente já está incluída com o Python, então você pode não precisar instalá-la explicitamente.
