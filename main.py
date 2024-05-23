@@ -1,8 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 from openai import OpenAI
+import os
 
-Chave_API = 'sk-proj-V7dIg8K4sUuZmTF34sH6T3BlbkFJCk81jmvcmnji16TDZNc1'
+Chave_API = os.getenv('OPEN_AI_KEY')
 
 #Interface do Chat
 class Interface:
@@ -10,17 +11,17 @@ class Interface:
         self.window_principal = window_principal
 
         #Título da Janela
-        window_principal.title("Chatbot")
+        window_principal.title('Chatbot')
 
         #Cor do Fundo
-        window_principal.configure(bg="#000000")
+        window_principal.configure(bg='#000000')
 
         #Tela do Chat
-        self.tela_do_chat = tk.Frame(window_principal, bg="#000000")
+        self.tela_do_chat = tk.Frame(window_principal, bg='#000000')
         self.tela_do_chat.pack(padx=10, pady=10)
 
         #Texto dentro da Tela do Chat
-        self.texto_do_chat = tk.Text(self.tela_do_chat, height=20, width=50, bg="white", bd=0, wrap="word", font=("Times New Roman*", 11))
+        self.texto_do_chat = tk.Text(self.tela_do_chat, height=20, width=50, bg='white', bd=0, wrap='word', font=('Times New Roman*', 11))
         self.texto_do_chat.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
         #Barra de Rolagem
@@ -29,32 +30,32 @@ class Interface:
         self.texto_do_chat.config(yscrollcommand=self.barra_de_rolagem.set)
 
         #Campo da Pergunta
-        self.campo_pergunta = tk.Frame(window_principal, bg="#000000")
+        self.campo_pergunta = tk.Frame(window_principal, bg='#000000')
         self.campo_pergunta.pack(padx=10, pady=10, fill=tk.X)
 
         #Texto/Input da Pergunta
-        self.input_pergunta = ttk.Entry(self.campo_pergunta, width=5, font=("Times New Roman", 11))
+        self.input_pergunta = ttk.Entry(self.campo_pergunta, width=5, font=('Times New Roman', 11))
         self.input_pergunta.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
         #Botão de Enviar
-        self.botao_enviar = ttk.Button(self.campo_pergunta, text="Enviar", command=self.enviar_pergunta)
+        self.botao_enviar = ttk.Button(self.campo_pergunta, text='Enviar', command=self.enviar_pergunta)
         self.botao_enviar.pack(side=tk.RIGHT)
 
         self.chatbot = OpenAI(api_key = Chave_API)
 
     def enviar_pergunta(self):
         pergunta = self.input_pergunta.get()
-        self.texto_do_chat.insert(tk.END, "Você: {}\n".format(pergunta), "user")
+        self.texto_do_chat.insert(tk.END, 'Você: {}\n'.format(pergunta), 'user')
 
 
         #Parâmetros do Bot
         comportamento_chatbot = 'Você é um assistente virtual amigável de uma empresa de tecnologia e deve auxiliar os usuários com as suas dúvidas.'
 
         conclusao = self.chatbot.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model='gpt-3.5-turbo',
             messages=[
-                {"role": "system", "content": comportamento_chatbot},
-                {"role": "user", "content": pergunta}],
+                {'role': 'system', 'content': comportamento_chatbot},
+                {'role': 'user', 'content': pergunta}],
             
             #Índice de Aleatoriedade do Bot, varia de 0 a 2
             temperature=1,
@@ -74,9 +75,9 @@ class Interface:
 
         #Filtrar a resposta no JSON
         resposta = conclusao.choices[0].message.content
-        self.texto_do_chat.insert(tk.END, "Chatbot: {}\n\n".format(resposta), "chatbot")
+        self.texto_do_chat.insert(tk.END, 'Chatbot: {}\n\n'.format(resposta), 'chatbot')
+        #Limpar input
         self.input_pergunta.delete(0, tk.END)
-
 def main():
 
     root = tk.Tk()
@@ -88,11 +89,10 @@ def main():
     root.resizable(False, False)
 
     gui = Interface(root)
-
-    gui.texto_do_chat.tag_configure("user", foreground="black", font=("Arial", 11, "bold"))
-    gui.texto_do_chat.tag_configure("chatbot", foreground="#0D47A1", font=("Arial", 11, "bold"))
+    gui.texto_do_chat.tag_configure('user', foreground='black', font=('Arial', 11, 'bold'))
+    gui.texto_do_chat.tag_configure('chatbot', foreground='#0D47A1', font=('Arial', 11, 'bold'))
 
     root.mainloop()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
